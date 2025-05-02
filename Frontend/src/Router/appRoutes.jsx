@@ -20,8 +20,8 @@ import EventDetails from "../Pages/events/eventDescription";
 import UpdateEvent from "../Pages/events/updateEvent";
 import Contact from "../Pages/Contact";
 import UserManagement from "../Pages/users/UserList";
-import Chart from "../Pages/admin/statistics";
 import Statistics from "../Pages/admin/statistics";
+import { ProtectedRoute } from "./protecterRouter";
 
 const AppRoutes = () => {
     const dispatch = useDispatch();
@@ -44,21 +44,22 @@ const AppRoutes = () => {
             <Route path="/about" element={<AboutUs />} />
             <Route path="/hero" element={<HeroSection/>} />
             <Route path="/contact" element={<Contact/>} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
 
 
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
-           <Route path="/events/create" element={<CreateEvent></CreateEvent>}></Route>
-           <Route path="/user-dashboard" element={<UserDashboard />} />
-           <Route path="/admin-dashboard" element={<AdminDashboard/>} />
-           <Route path="/update-profile" element={<UpdateProfile />} />
-           <Route path="/messages" element={<AdminMessages />} />
-           <Route path="/events" element={< EventOptions/>} />
+
+           <Route path="/events/create" element={<ProtectedRoute allowedRoles={["user"]}><CreateEvent></CreateEvent></ProtectedRoute>}></Route>
+           <Route path="/user-dashboard" element={<ProtectedRoute allowedRoles={["user"]}><UserDashboard></UserDashboard></ProtectedRoute>} />
+           <Route path="/admin-dashboard" element={<ProtectedRoute allowedRoles={["admin"]}><AdminDashboard></AdminDashboard></ProtectedRoute>} />
+           <Route path="/update-profile" element={<ProtectedRoute allowedRoles={["user"]}><UpdateProfile></UpdateProfile></ProtectedRoute>} />
+           <Route path="/messages" element={<ProtectedRoute allowedRoles={["admin"]}><AdminMessages></AdminMessages></ProtectedRoute>} />
+           <Route path="/events" element={<ProtectedRoute allowedRoles={["admin","user"]}><EventOptions></EventOptions></ProtectedRoute>} />
            <Route path="/events/getevents" element={< ViewEvents/>} />
            <Route path="/events/:eventId" element={<EventDetails />} />
-           <Route path="/events/update/:eventId" element={<UpdateEvent/>} />
-           <Route path="/user/management" element={<UserManagement/>} />
-           <Route path="/statics" element={<Statistics/>} />
+           <Route path="/events/update/:eventId" element={<ProtectedRoute allowedRoles={["admin","user"]}><UpdateEvent></UpdateEvent></ProtectedRoute>} />
+           <Route path="/user/management" element={<ProtectedRoute allowedRoles={["admin"]}><UserManagement></UserManagement></ProtectedRoute>} />
+           <Route path="/statics" element={<ProtectedRoute allowedRoles={["admin"]}><Statistics></Statistics></ProtectedRoute>} />
             </Routes>
 
         </>
